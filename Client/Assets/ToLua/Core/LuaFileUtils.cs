@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Collections;
 using System.Text;
+using GameBase;
 
 namespace LuaInterface
 {
@@ -48,8 +49,7 @@ namespace LuaInterface
             }
         }
 
-        //beZip = false 在search path 中查找读取lua文件。否则从外部设置过来bundel文件中读取lua文件
-        public bool beZip = true;
+        public bool beZip = false;
         protected List<string> searchPaths = new List<string>();
         protected Dictionary<string, AssetBundle> zipMap = new Dictionary<string, AssetBundle>();
 
@@ -58,6 +58,14 @@ namespace LuaInterface
         public LuaFileUtils()
         {
             instance = this;
+            if (AppConst.DebugModel || !AppConst.LuaAbBuildModel)
+            {
+                beZip = false;
+            }
+            else
+            {
+                beZip = true;
+            }
         }
 
         public virtual void Dispose()
@@ -101,7 +109,6 @@ namespace LuaInterface
         public bool RemoveSearchPath(string path)
         {
             int index = searchPaths.IndexOf(path);
-
             if (index >= 0)
             {
                 searchPaths.RemoveAt(index);
@@ -139,11 +146,10 @@ namespace LuaInterface
             }
 
             string fullPath = null;
-
             for (int i = 0; i < searchPaths.Count; i++)
             {
                 fullPath = searchPaths[i].Replace("?", fileName);
-
+                
                 if (File.Exists(fullPath))
                 {
                     return fullPath;
@@ -159,7 +165,6 @@ namespace LuaInterface
             {
                 string path = FindFile(fileName);
                 byte[] str = null;
-
                 if (!string.IsNullOrEmpty(path) && File.Exists(path))
                 {
 #if !UNITY_WEBPLAYER
@@ -273,5 +278,27 @@ namespace LuaInterface
         {
             return LuaConst.osDir;
         }
+
+        /// <summary>
+        /// 添加打入Lua代码的AssetBundle
+        /// </summary>
+        /// <param name="bundle"></param>
+        public void AddBundle(string bundleName)
+        {
+            if (!beZip) return;
+            string url = Util.LuaDataPath + bundleName.ToLower();
+            if (File.Exists(url))
+            {
+                var bytes = File.ReadAllBytes(url);
+                AssetBundle bundle = AssetBundle.LoadFromMemory(bytes);
+                if (bundle != null)
+                {
+                    bundleName = bundleName.Replace(".unity3d", "");
+                    AddSearchBundle(bundleName.ToLower(), bundle);
+                }
+            }
+        }
+
+    
     }
 }

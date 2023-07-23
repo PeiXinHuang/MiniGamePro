@@ -9,6 +9,8 @@
 /Client/[Bb]uilds/
 /Client/[Ll]ogs/
 /Client/[Mm]emoryCaptures/
+/Client/Assets/ABPackage/
+/Client/Assets/TempLua/
 
 Art/*
 Build/*

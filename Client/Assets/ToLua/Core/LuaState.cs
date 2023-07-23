@@ -30,6 +30,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
+using GameBase;
 
 namespace LuaInterface
 {
@@ -119,6 +120,7 @@ namespace LuaInterface
             OpenBaseLibs();
             LuaSetTop(0);
             InitLuaPath();
+            InitLuaBundle();
             Debugger.Log("Init lua state cost: {0}", Time.realtimeSinceStartup - time);
         }        
 
@@ -179,30 +181,7 @@ namespace LuaInterface
         void InitLuaPath()
         {
             InitPackagePath();
-
-            if (!LuaFileUtils.Instance.beZip)
-            {
-#if UNITY_EDITOR
-                if (!Directory.Exists(LuaConst.luaDir))
-                {
-                    string msg = string.Format("luaDir path not exists: {0}, configer it in LuaConst.cs", LuaConst.luaDir);
-                    throw new LuaException(msg);
-                }
-
-                if (!Directory.Exists(LuaConst.toluaDir))
-                {
-                    string msg = string.Format("toluaDir path not exists: {0}, configer it in LuaConst.cs", LuaConst.toluaDir);
-                    throw new LuaException(msg);
-                }
-
-                AddSearchPath(LuaConst.toluaDir);
-                AddSearchPath(LuaConst.luaDir);
-#endif
-                if (LuaFileUtils.Instance.GetType() == typeof(LuaFileUtils))
-                {
-                    AddSearchPath(LuaConst.luaResDir);
-                }
-            }
+            AddSearchPath(GameBase.Util.LuaDataPath);
         }
 
         void OpenBaseLuaLibs()
@@ -721,7 +700,7 @@ namespace LuaInterface
             }
         }
 
-        public void AddSearchPath(string fullPath)
+        private void AddSearchPath(string fullPath)
         {
             if (!Path.IsPathRooted(fullPath))
             {
@@ -729,8 +708,32 @@ namespace LuaInterface
             }
 
             fullPath = ToPackagePath(fullPath);
-            LuaFileUtils.Instance.AddSearchPath(fullPath);        
+            LuaFileUtils.Instance.AddSearchPath(fullPath);
+          
         }
+
+        private void InitLuaBundle()
+        {
+            LuaFileUtils loader = LuaFileUtils.Instance;
+            loader.AddBundle("lua.unity3d");
+            loader.AddBundle("lua_math.unity3d");
+            loader.AddBundle("lua_system.unity3d");
+            loader.AddBundle("lua_system_reflection.unity3d");
+            loader.AddBundle("lua_unityengine.unity3d");
+            loader.AddBundle("lua_common.unity3d");
+            loader.AddBundle("lua_logic.unity3d");
+            loader.AddBundle("lua_view.unity3d");
+            loader.AddBundle("lua_controller.unity3d");
+            loader.AddBundle("lua_misc.unity3d");
+
+            loader.AddBundle("lua_protobuf.unity3d");
+            loader.AddBundle("lua_3rd_cjson.unity3d");
+            loader.AddBundle("lua_3rd_luabitop.unity3d");
+            loader.AddBundle("lua_3rd_pbc.unity3d");
+            loader.AddBundle("lua_3rd_pblua.unity3d");
+            loader.AddBundle("lua_3rd_sproto.unity3d");
+        }
+
 
         public void RemoveSeachPath(string fullPath)
         {
