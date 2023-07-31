@@ -23,6 +23,5 @@ public class GameManager : Manager<GameManager>
             EntityManager.Instance.CreateEntity(EntityType.Fruit);
         }
         systems.Add(new TransformUpdateSystem());
-        systems.Add(new RenderSystem());
     }
 }

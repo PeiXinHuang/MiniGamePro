@@ -15,5 +15,4 @@ public class TransformUpdateSystem : BaseSystem
             positionComponent.SetPosition(newPos.x, newPos.y, newPos.z);
         }
     }
-    
 }

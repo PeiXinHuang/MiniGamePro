@@ -16,7 +16,8 @@ Art/*
 Build/*
 Design/*
 Plugins/*
-Server/*
+Server/Res/*
+Server/__pycache__/*
 ReferencePro/*
 
 

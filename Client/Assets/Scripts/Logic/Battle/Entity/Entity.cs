@@ -64,4 +64,9 @@ public class Entity
         }
         components.Add(componentType, component);
     }
+
+    public virtual void Destroy()
+    {
+       
+    }
 }
