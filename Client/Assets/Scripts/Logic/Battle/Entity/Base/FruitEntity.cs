@@ -9,6 +9,8 @@ public class FruitEntity : Entity
     {
         this.AddComponent<PositionComponent>(new PositionComponent());
         gameObject = SpawnManager.Instance.SpawnFruitObj(1);
+        WorldObjHelper worldObj = gameObject.AddComponent<WorldObjHelper>();
+        worldObj.uid = entityId;
     }
 
     public override void Destroy()

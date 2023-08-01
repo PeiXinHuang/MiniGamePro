@@ -18,10 +18,10 @@ public class GameManager : Manager<GameManager>
     }
     public void StartGame(int levelId)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1; i++)
         {
             EntityManager.Instance.CreateEntity(EntityType.Fruit);
         }
-        systems.Add(new TransformUpdateSystem());
+        systems.Add(new EasyTouchSystem());
     }
 }

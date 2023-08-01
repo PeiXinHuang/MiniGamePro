@@ -65,6 +65,11 @@ public class Entity
         components.Add(componentType, component);
     }
 
+    public void OnTouchClick()
+    {
+        Debug.Log(entityId);
+    }
+
     public virtual void Destroy()
     {
        

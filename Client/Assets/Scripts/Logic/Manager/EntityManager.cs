@@ -9,12 +9,13 @@ public enum EntityType {
 
 public class EntityManager : Manager<EntityManager>
 {
-    private Dictionary<EntityType, List<Entity>> entityDir;
-
+    private Dictionary<EntityType, List<Entity>> entityTypeDir;
+    private Dictionary<int, Entity> entityIdDir;
 
     public EntityManager()
     {
-        entityDir = new Dictionary<EntityType, List<Entity>>();
+        entityTypeDir = new Dictionary<EntityType, List<Entity>>();
+        entityIdDir = new Dictionary<int, Entity>();
     }
 
     public Entity CreateEntity(EntityType entityType)
@@ -28,11 +29,12 @@ public class EntityManager : Manager<EntityManager>
         {
             Debug.LogWarning("没有需要构造的EntityType类型：" + entityType.ToString());
         }
-        if (!this.entityDir.ContainsKey(entityType))
+        if (!this.entityTypeDir.ContainsKey(entityType))
         {
-            this.entityDir.Add(entityType, new List<Entity>());
+            this.entityTypeDir.Add(entityType, new List<Entity>());
         }
-        this.entityDir[entityType].Add(entity);
+        this.entityTypeDir[entityType].Add(entity);
+        this.entityIdDir.Add(entity.entityId, entity);
         return entity;
     }
 
@@ -48,12 +50,17 @@ public class EntityManager : Manager<EntityManager>
         //}
     }
 
+    public Entity GetEntityById(int entityId)
+    {
+        return this.entityIdDir[entityId];
+    }
+
     public List<Entity> GetEntityWithComp<T>()
     {
         List<Entity> entities = new List<Entity>();
-        foreach (var key in entityDir.Keys)
+        foreach (var key in entityTypeDir.Keys)
         {
-            foreach (var item in entityDir[key])
+            foreach (var item in entityTypeDir[key])
             {
                 entities.Add(item);
             }
