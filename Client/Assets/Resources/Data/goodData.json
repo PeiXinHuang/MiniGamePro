@@ -1,0 +1,14 @@
+{
+    "goodDatas":[
+        {
+            "goodId" : 1,
+            "prefab" : "Good",
+            "skillId": 1
+        },
+        {
+            "goodId" : 2,
+            "prefab" : "Good",
+            "skillId": 2
+        }
+    ]
+}
