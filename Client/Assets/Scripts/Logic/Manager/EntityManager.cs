@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Base;
 
-public enum EntityType {
-    Fruit = 1,
-}
-
-public class EntityManager : Manager<EntityManager>
+public class EntityManager : SingletonMonoBehaviour<EntityManager>
 {
     private Dictionary<EntityType, List<Entity>> entityTypeDir;
     private Dictionary<int, Entity> entityIdDir;
 
-    public EntityManager()
+    public override void Init()
     {
         entityTypeDir = new Dictionary<EntityType, List<Entity>>();
         entityIdDir = new Dictionary<int, Entity>();
@@ -27,7 +23,7 @@ public class EntityManager : Manager<EntityManager>
         }
         else
         {
-            Debug.LogWarning("Ã»ÓÐÐèÒª¹¹ÔìµÄEntityTypeÀàÐÍ£º" + entityType.ToString());
+            Debug.LogWarning("Ã»ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½EntityTypeï¿½ï¿½ï¿½Í£ï¿½" + entityType.ToString());
         }
         if (!this.entityTypeDir.ContainsKey(entityType))
         {
@@ -46,7 +42,7 @@ public class EntityManager : Manager<EntityManager>
         //}
         //else
         //{
-        //    UDebug.LogWarning("Ã»ÓÐÕÒµ½Entity, Id£º" + entityId.ToString());
+        //    UDebug.LogWarning("Ã»ï¿½ï¿½ï¿½Òµï¿½Entity, Idï¿½ï¿½" + entityId.ToString());
         //}
     }
 

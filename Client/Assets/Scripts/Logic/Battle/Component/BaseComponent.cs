@@ -2,22 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseSystem
+public class BaseComponent
 {
-    public BaseSystem()
+    public Entity entity;
+    public BaseComponent()
     {
 
     }
-    public virtual void Init()
+    public virtual void Init(Entity entity)
     {
-
-    }
-    public virtual void OnUpdate()
-    {
-
+        this.entity = entity;
     }
     public virtual void Dispose()
     {
-        
+
     }
 }

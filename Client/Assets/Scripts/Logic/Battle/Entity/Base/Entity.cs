@@ -7,71 +7,92 @@ public class Entity
 {
     public static int _instanceId = 0;  
     public int entityId { get; }
-    public Dictionary<System.Type, object> components = null;
+    public List<BaseComponent> components = null;
     public Entity()
     {
         _instanceId++;
         this.entityId = _instanceId;
-        components = new Dictionary<System.Type, object>();
     }
 
-    public void AddComponent<T>(T component)
+    public void AddComponent<T>() where T : BaseComponent, new()
     {
-        System.Type componentType = typeof(T);
-        if (components.ContainsKey(componentType))
+        if(components == null)
         {
-            UDebug.LogWarning("不要重复添加Component");
+            components = new List<BaseComponent>();
         }
-        else
-        {
-            components.Add(typeof(T), component);
-        }
+        T t = new T();
+        t.Init(this);
+        component.Add(t);
+        return t;
     }
 
-    public void RemoveComponent<T>()
+    public bool HasComponent<T>() where T :BaseComponent
     {
-        System.Type componentType = typeof(T);
-        if (components.ContainsKey(componentType))
+        if(components == null)
         {
-            components.Remove(componentType);
+            return false;
         }
-        else
+        foreach(BaseComponent component in components)
         {
-            UDebug.LogWarning("试图移除不存在的Component");
+            if(component.GetType() == typeof(T))
+            {
+                return true;
+            }
         }
+        return false;
     }
 
-    public T GetComponent<T>()
+    public void RemoveComponent(BaseComponent comp)
     {
-        System.Type componentType = typeof(T);
-        if (components.ContainsKey(componentType))
+        if(components != null)
         {
-            return (T)components[componentType];
-        }
-        else
-        {
-            UDebug.LogWarning("试图获取不存在的Component");
-            return default(T);
+            components.Remove(comp)
+            comp.Dispose();
         }
     }
 
-    public void SetComponent<T>(T component)
+    public T GetComponent<T>() where T : BaseComponent
     {
-        System.Type componentType = typeof(T);
-        if (components.ContainsKey(componentType))
+        if(components == null)
         {
-            components.Remove(componentType);
+            return null;
         }
-        components.Add(componentType, component);
+        foreach(BaseComponent component in components)
+        {
+            if(component.GetType() == typeof(T))
+            {
+                return (T)component;
+            }
+        }           
+        return null;
     }
 
-    public void OnTouchClick()
+    public T GetComponents<T>() where T : BaseComponent
     {
-        Debug.Log(entityId);
+        List<T> ret = new List<T>();
+        if(components == null)
+        {
+            return ret;
+        }
+        foreach(BaseComponent component in components)
+        {
+            if(component.GetType() == typeof(T))
+            {
+                ret.Add((T)component);
+            }
+        }
+        return null;
     }
 
-    public virtual void Destroy()
+    public virtual void Dispose()
     {
-       
+       if(components != null)   
+       {
+            foreach(BaseComponent comp in comp)
+            {
+                comp.Dispose();
+            }
+            components = null;
+       }
     }
 }
