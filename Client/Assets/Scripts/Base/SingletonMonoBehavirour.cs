@@ -16,4 +16,9 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
             return _instance;
         }
     }
+
+    public virtual void Init()
+    {
+
+    }
 }
