@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TransformUpdateSystem : BaseSystem
 {
-    public override void Update()
+    public override void OnUpdate()
     {
         List<Entity> entities = EntityManager.Instance.GetEntityWithComp<PositionComponent>();
         foreach (var entity in entities)
