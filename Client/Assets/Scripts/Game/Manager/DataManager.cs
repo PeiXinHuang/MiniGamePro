@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 public class DataManager : SingletonMonoBehaviour<DataManager>
 {
     public List<LevelData> levelList;
