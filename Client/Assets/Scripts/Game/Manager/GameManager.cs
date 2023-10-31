@@ -2,26 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : Manager<GameManager>
+public class GameManager : SingletonMonoBehaviour<GameManager>
 {
-    public List<BaseSystem> systems = null;
-    public override void Initialize()
+    protected void Awake()
     {
-        systems = new List<BaseSystem>();
+
     }
-    void Update()
+    private void Start()
     {
-        foreach (var system in systems)
-        {
-            system.Update();
-        }
+        StartGmae();
     }
-    public void StartGame(int levelId)
+    private void Update()
     {
-        for (int i = 0; i < 1; i++)
-        {
-            EntityManager.Instance.CreateEntity(EntityType.Fruit);
-        }
-        systems.Add(new EasyTouchSystem());
+       
+    }
+    private void OnDestroy()
+    {
+        DisposeGame();
+    }
+    private void InitGame()
+    {
+        DataManager.Instance.Init();
+        EntityManager.Instance.Init();
+        SystemManager.Instance.Init();
+        LevelManager.Instance.Init();
+        EventManager.Instance.Init();
+        UIManager.Instance.Init();
+        PlayerInputManager.Instance.Init();
+    }
+    private void StartGame()
+    {
+        EntityManager.Instance.CreatePlayer();
+        LevelManager.Instance.InitLevel();
+
+        SystemManager.Instance.AddSystem<MoveSystem>();
+        SystemManager.Instance.AddSystem<SpawnGoodsSystem>();
+        SystemManager.Instance.AddSystem<CollisionSystem>();
+     
+        SystemManager.Instance.AddSystem<CombatSystem>();
+        SystemManager.Instance.AddSystem<DisposeSystem>();
+        SystemManager.Instance.AddSystem<RenderSystem>();
+    }
+
+
+    private void InitData()
+    {
+
+    }
+
+    private void DisposeGame()
+    {
+
+    }
+
+    private void OnDestroy()
+    {
+        
     }
 }
